@@ -7,7 +7,7 @@ services:
     environment:
       - TZ=America/New_York
       - JVM_MAXIMUM_MEMORY=16384m
-      - ATL_PROXY_NAME=confluence.tenzin.io
+      - ATL_PROXY_NAME=confluence.home.internal
       - ATL_PROXY_PORT=443
       - ATL_TOMCAT_SCHEME=https
       - ATL_LICENSE_KEY=AAABMA0ODAoPeNptUE1LAzEQvedXBLwo0pJsQWghoOyuWNh2xVZPXqZx2gaz2TLJFuuvN91NQcTDXObN+5qrRzK81oGLKRdiJuVsInherHkmMsGWXbNBqrevHskrKViBXpM5BNM6lbduazt0Gvn1CumIdMOl4P3t+4yvAlBA4pXR6DyynBDOvAICqrP6SIqRmLIoE0CHJTSo1ui+jePVHj734HZMR4txBM0RVaAOh0VSHjaJXi7AWBV6/tgm/i0EC94bcPe7JuJj3TasPILt+iRqC9YnzZRyfTpgnySvF4vyJZ8/VMwO0FusdSZlLFq56ASxefl1MHS6VJKpUk07cMYPJk9tg7yCDVuVSxVnJLO7TEymkiXPeaGqefEf8ku9c9Y0JuAHe+5I78Hj3z/+AI6YmO8wLAIUWTORpGfsVbwClxrvVzrc6PVeUvACFG/jqLqjrFXQjrzaTMKHRuWdOmaqX02f7
@@ -15,7 +15,7 @@ services:
       - ATL_DB_POOLMINSIZE=125
       - ATL_DB_POOLMAXSIZE=175
       - ATL_DB_TIMEOUT=300
-    image: repo.tenzin.io/hub/atlassian/confluence-server:7.12.1
+    image: repo.home.internal/hub/atlassian/confluence-server:7.12.1
     restart: unless-stopped
     volumes:
       - confluence_home:/var/atlassian/application-data/confluence
@@ -28,24 +28,23 @@ services:
       - MYSQL_PASSWORD=jY80cXRCNYiPk
       - MYSQL_ROOT_PASSWORD=68JY9pI5ximek
       - MYSQL_DATABASE=confluence
-    image: repo.tenzin.io/hub/mysql:8.0
+    build:
+      context: ./build-mysql
     cap_add:
       - SYS_NICE
     restart: unless-stopped
     volumes:
       - mysql_data:/var/lib/mysql    
-      - ./mysql_config:/etc/mysql
 
   nginx:
-    image: repo.tenzin.io/hub/nginx:mainline
+    build:
+      context: ./build-nginx
     restart: unless-stopped
     depends_on:
       - confluence
     environment:
       - TZ=America/New_York
     restart: unless-stopped
-    volumes:
-      - ./nginx_config:/etc/nginx
     ports:
       - 443:443
       - 80:80

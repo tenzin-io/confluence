@@ -19,7 +19,8 @@ services:
       - ATL_PROXY_NAME=confluence.tenzin.io
       - ATL_PROXY_PORT=443
       - ATL_TOMCAT_SCHEME=https
-    image: atlassian/confluence-server:7.17.1
+    build: 
+      context: ./build-confluence
     restart: unless-stopped
     volumes:
       - confluence_data:/confluence_data

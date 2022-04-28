@@ -2,10 +2,8 @@
 version: '3.1'
 services:
   mkcert:
-    build:
-      context: ./build-mkcert
+    image: ghcr.io/tenzin-io/mkcert:amd64-v1
     environment:
-      - 'CAROOT=/certs.d'
       - 'CERT_HOSTNAME=confluence'
       - 'CERT_DOMAIN=tenzin.io'
     volumes:
